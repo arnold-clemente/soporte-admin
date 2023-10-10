@@ -9,9 +9,12 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
+
 
 class User extends Authenticatable
 {
+    use HasRoles;
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
@@ -25,8 +28,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'usuario',
         'email',
         'password',
+        'tipo',
+        'profile_photo_path',
     ];
 
     /**
@@ -58,4 +64,28 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    //relacion uno a muchos user  - tecnico
+    public function tecnico()
+    {
+        return $this->hasOne(Tecnico::class);
+    }
+
+    //relacion uno a muchos user  - funcionario
+    public function funcionario()
+    {
+        return $this->hasOne(Funcionario::class);
+    }
+
+    //relacion uno a muchos user - notas
+    public function notas()
+    {
+        return $this->hasMany(Nota::class);
+    }
+
+    //relacion uno a muchos user - informes
+    public function informes()
+    {
+        return $this->hasMany(Informe::class);
+    }
 }
